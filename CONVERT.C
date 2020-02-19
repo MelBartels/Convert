@@ -3,7 +3,7 @@
   and visa versa.  Before coordinate conversion can take place, the
   program needs to be initialized by pointing the telescope at two known
   positions in the sky.
-     Horizon is inputed and displayed as increasing CW, but internally, the
+     Horizon is input and displayed as increasing CW, but internally, the
   program treats the horizon as increasing CCW.
      The program runs in real time, continuously updating coordinates, if the
   system time and date are used.
@@ -11,6 +11,7 @@
      Program by Mel Bartels, March 15, 1990.
 */
 
+#include <stdlib.h>
 #include <stdio.h>
 #include <conio.h>
 #include <math.h>
@@ -254,7 +255,7 @@ void base_text_attr(void);
 
 
 
-void main(void)
+int main(void)
 {
  char screen_buffer[25*80*2];     /* buffer to hold screen */
  int select=1,                    /* menu selection; set to option #1 */
@@ -363,6 +364,7 @@ void main(void)
  _setcursortype(_NORMALCURSOR);
  normvideo();
  clrscr();
+ return 0;
 }     /* main */
 
 
@@ -899,7 +901,6 @@ void display_fab_err(double *Z1ptr, double *Z2ptr, double *Z3ptr)
 void get_init(int position, struct pos_struct *posptr)
 
 {
- char num_str[MAX_DIGITS+3];
  int left   = MAIN_WINDOW_LEFT+3,
      right  = MAIN_WINDOW_RIGHT-3,
      top    = 6,
@@ -1242,8 +1243,7 @@ void get_bright_star_coord(struct pos_struct *posptr)
 
 {
  char ch;                         /* keyboard response */
- int select=0,                    /* user's bright star choice */
-     pos;                         /* array position */
+ int select=0;                    /* user's bright star choice */
 
 
  /* get keyboard response (either left cursor, right cursor, or return) */
@@ -1382,8 +1382,7 @@ int get_valid_star_key(void)
 void get_coordinates(struct pos_struct *posptr)
 
 {
- char ch,
-      num_str[6+3],
+ char num_str[6+3],
       description[STAR_NAME_LEN+2];
  int minus_flag,
      left   = STARS_LEFT,
@@ -1704,8 +1703,7 @@ void get_scope(struct pos_struct *posptr)
 
 void display_coord(int coord_type, struct pos_struct *posptr)
 {
- int col,
-     row;
+ int row;
 
 
  switch (coord_type) {
@@ -1904,7 +1902,7 @@ void determinant_subr(double *Wptr)
 void subr_750(double F, double H, double Z1, double Z2)
 {
 
- Y[1][0]=cos(F)*cos(H)-sin(F)*(Z2/RADIAN)+sin(F)*cos(H)*(Z1/RADIAN);
+ Y[1][0]=cos(F)*cos(H)-sin(F)*(Z2/RADIAN)+sin(F)*sin(H)*(Z1/RADIAN);
  Y[2][0]=sin(F)*cos(H)+cos(F)*(Z2/RADIAN)-cos(F)*sin(H)*(Z1/RADIAN);
  Y[3][0]=sin(H);
 
@@ -1921,7 +1919,6 @@ void subr_750(double F, double H, double Z1, double Z2)
 void get_equat_to_scope(struct pos_struct *posptr, double Z1, double Z2,
 			double Z3, int *run_real_time_flag_ptr)
 {
- char num_str[MAX_DIGITS+3];
  int left   = MAIN_WINDOW_LEFT+3,
      right  = MAIN_WINDOW_RIGHT-3,
      top    = 6,
@@ -2002,7 +1999,6 @@ void get_equat_to_scope(struct pos_struct *posptr, double Z1, double Z2,
 void get_scope_to_equat(struct pos_struct *posptr, double Z1, double Z2,
 			double Z3, int *run_real_time_flag_ptr)
 {
- char num_str[MAX_DIGITS+3];
  int left   = MAIN_WINDOW_LEFT+3,
      right  = MAIN_WINDOW_RIGHT-3,
      top    = 6,
@@ -2172,7 +2168,7 @@ void angle_subr(double *Fptr, double *Hptr)
 void subr_785(double F, double H, double Z1, double Z2)
 {
 
- Y[1][1]=cos(F)*cos(H)+sin(F)*(Z2/RADIAN)-sin(F)*cos(H)*(Z1/RADIAN);
+ Y[1][1]=cos(F)*cos(H)+sin(F)*(Z2/RADIAN)-sin(F)*sin(H)*(Z1/RADIAN);
  Y[2][1]=sin(F)*cos(H)-cos(F)*(Z2/RADIAN)+cos(F)*sin(H)*(Z1/RADIAN);
  Y[3][1]=sin(H);
 
